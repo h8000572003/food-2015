@@ -1,7 +1,7 @@
 package tw.com.wa.foods.compnet;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,17 +78,11 @@ public class FoodAdapterV1 extends BaseAdapter {
         //設定內容文字
         viewTag.addBtn.setText(food.getName());
 
-        viewTag.getAddBtn().setOnClickListener(new AddEvent(viewTag, food));
+        viewTag.getRootView().setOnClickListener(new AddEvent(viewTag, food));
         viewTag.getReduceBtn().setOnClickListener(new ReduceEvent(viewTag, food));
 
 
-        if (food.getNo() > 0) {
-            viewTag.addBtn.setText(String.format("%d,%s", food.getNo(), food.getName()));
-            viewTag.rootView.setBackgroundColor(Color.LTGRAY);
-        } else {
-            viewTag.addBtn.setText(String.format("%s", food.getName()));
-            viewTag.rootView.setBackgroundColor(Color.WHITE);
-        }
+        setShowView(food, viewTag);
 
 
         return convertView;
@@ -107,8 +101,7 @@ public class FoodAdapterV1 extends BaseAdapter {
         @Override
         public void onClick(View v) {
             food.setNo(food.getNo() + 1);
-            tag.getAddBtn().setText(String.format("%d,%s", food.getNo(), food.getName()));
-            tag.rootView.setBackgroundColor(Color.LTGRAY);
+            setShowView(food, tag);
         }
     }
 
@@ -128,18 +121,27 @@ public class FoodAdapterV1 extends BaseAdapter {
 
             if (food.getNo() > 0) {
                 food.setNo(food.getNo() - 1);
-
-
-                if (food.getNo() == 0) {
-                    tag.addBtn.setText(String.format("%s", food.getName()));
-                    tag.rootView.setBackgroundColor(Color.WHITE);
-                } else {
-                    tag.getAddBtn().setText(String.format("%d,%s", food.getNo(), food.getName()));
-                    tag.rootView.setBackgroundColor(Color.LTGRAY);
-                }
-
-
             }
+            setShowView(food, tag);
+        }
+    }
+
+    private void setShowView(Food food, ViewTag viewTag) {
+        if (food.getNo() == 0) {
+
+
+            StringBuffer buffer = new StringBuffer();
+            buffer.append(food.getName());
+            buffer.append("<font color=#FF0000>");
+            buffer.append("$" + food.getDollar());
+            buffer.append("</font>");
+
+            viewTag.getAddBtn().setText(Html.fromHtml(buffer.toString()));
+            viewTag.getReduceBtn().setEnabled(false);
+            viewTag.getReduceBtn().setText("");
+        } else {
+            viewTag.getReduceBtn().setEnabled(true);
+            viewTag.getReduceBtn().setText(food.getNo() + "");
         }
     }
 
@@ -180,6 +182,15 @@ public class FoodAdapterV1 extends BaseAdapter {
 
         public void setReduceBtn(Button reduceBtn) {
             this.reduceBtn = reduceBtn;
+        }
+
+
+        public View getRootView() {
+            return rootView;
+        }
+
+        public void setRootView(View rootView) {
+            this.rootView = rootView;
         }
     }
 
