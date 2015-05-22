@@ -31,5 +31,5 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
-        android:text="結帳" />
+        android:text="算錢" />
 </RelativeLayout>

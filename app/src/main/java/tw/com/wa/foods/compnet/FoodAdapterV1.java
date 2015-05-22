@@ -1,6 +1,7 @@
 package tw.com.wa.foods.compnet;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,7 +61,7 @@ public class FoodAdapterV1 extends BaseAdapter {
                     (TextView) convertView.findViewById(
                             R.id.item_name),
                     (Button) convertView.findViewById(
-                            R.id.d_btn), convertView.findViewById(R.id.card_view));
+                            R.id.d_btn), convertView);
 
 
             //設置容器內容
@@ -139,9 +140,12 @@ public class FoodAdapterV1 extends BaseAdapter {
             viewTag.getAddBtn().setText(Html.fromHtml(buffer.toString()));
             viewTag.getReduceBtn().setEnabled(false);
             viewTag.getReduceBtn().setText("");
+            viewTag.getRootView().setBackgroundResource(R.color.white);
         } else {
             viewTag.getReduceBtn().setEnabled(true);
             viewTag.getReduceBtn().setText(food.getNo() + "");
+
+            viewTag.getRootView().setBackgroundResource(R.color.clickValue);
         }
     }
 
