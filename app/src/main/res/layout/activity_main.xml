@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,35 +10,26 @@
     tools:context=".MainActivity">
 
 
-    <android.support.v7.widget.RecyclerView
 
-        android:id="@+id/my_recycler_view"
+
+    <GridView
+        android:id="@+id/gridView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/resultBtn"
-        android:scrollbars="vertical" />
-
-    <Button
-        android:id="@+id/cleanBtn"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="重新填寫"
+        android:layout_above="@+id/resultBtn"
+        android:numColumns="2"
+     />
 
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
     <Button
         android:id="@+id/resultBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="結帳"
-        android:background="@android:color/holo_green_light"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/my_recycler_view"
-        android:layout_alignEnd="@+id/my_recycler_view"
-        android:layout_toRightOf="@+id/cleanBtn"
-        android:layout_toEndOf="@+id/cleanBtn" />
 
-
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:text="結帳" />
 </RelativeLayout>

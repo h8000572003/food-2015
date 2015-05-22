@@ -1,19 +1,27 @@
 package tw.com.wa.foods;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.LayoutManager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridView;
+import android.widget.Toast;
 
 import java.util.List;
 
-import tw.com.wa.foods.tw.com.wa.foods.domain.Food;
+import tw.com.wa.foods.compnet.FoodAdapter;
+import tw.com.wa.foods.compnet.FoodAdapterV1;
+import tw.com.wa.foods.domain.Food;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -22,11 +30,14 @@ public class MainActivity extends ActionBarActivity {
     private static final String TAG = "MainActivity";
     private RecyclerView mRecyclerView;
     private FoodAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private LayoutManager mLayoutManager;
 
 
     private Button cleanBtn = null;
     private Button resultBtn = null;
+    private FoodAdapterV1 foodAdapterV1 = null;
+
+    private GridView gridView;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -36,53 +47,32 @@ public class MainActivity extends ActionBarActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    private boolean isCheckPaid() {
+        return true;
+    }
+
+    private void handTabPhone() {
 
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        // specify an adapter (see also next example)
-        mAdapter = new FoodAdapter();
-        mRecyclerView.setAdapter(mAdapter);
-
-        this.cleanBtn = (Button) this.findViewById(R.id.cleanBtn);
+        this.gridView = (GridView) this.findViewById(R.id.gridView);
         this.resultBtn = (Button) this.findViewById(R.id.resultBtn);
 
+        this.foodAdapterV1 = new FoodAdapterV1(this);
 
-        this.cleanBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAdapter.clean();
-            }
-        });
+        this.gridView.setAdapter(this.foodAdapterV1);
 
-        // ===============
-        // 1x
-        // 2x
-        //         dx
-        //  ================
+        this.resultBtn = (Button) this.findViewById(R.id.resultBtn);
+
         this.resultBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent it = new Intent(MainActivity.this, ResultActivity.class);
 
 
                 int totalMoney = 0;
 
                 StringBuffer bur = new StringBuffer();
                 bur.append("============\n");
-                List<Food> foods = mAdapter.getFoodList();
+                final List<Food> foods = foodAdapterV1.getFoodList();
 
 
                 for (Food f : foods) {
@@ -102,15 +92,45 @@ public class MainActivity extends ActionBarActivity {
                 bur.append("============\n");
                 bur.append(String.format("$%d\n", totalMoney));
 
-                it.putExtra("message", bur.toString());
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage(bur.toString());
+                builder.setNegativeButton("確定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        foodAdapterV1.clean();
+                    }
+                });
+                builder.setPositiveButton("有錯在修改", null);
 
-                Log.v(TAG, bur.toString());
-                startActivityForResult(it, 500);
+                builder.show();
+
             }
         });
 
     }
 
+    private void handlePhone() {
+
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+
+        super.onCreate(savedInstanceState);
+
+
+
+        setContentView(R.layout.activity_main);
+
+        if (this.isCheckPaid()) {
+            this.handTabPhone();
+        } else {
+            this.handlePhone();
+        }
+
+
+    }
 
 
 }
