@@ -1,7 +1,6 @@
 package tw.com.wa.foods.compnet;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +22,12 @@ public class FoodAdapterV1 extends BaseAdapter {
 
     private List<Food> foodList = FoodBuild.build();
     private LayoutInflater myInflater;
+    private FoodAdapterV1.OnClickListener listener;
+
+    public interface OnClickListener {
+        void click(List<Food> foods);
+    }
+
 
     public FoodAdapterV1(Context ct) {
         myInflater = LayoutInflater.from(ct);
@@ -103,6 +108,10 @@ public class FoodAdapterV1 extends BaseAdapter {
         public void onClick(View v) {
             food.setNo(food.getNo() + 1);
             setShowView(food, tag);
+
+            if (listener != null) {
+                listener.click(foodList);
+            }
         }
     }
 
@@ -124,6 +133,10 @@ public class FoodAdapterV1 extends BaseAdapter {
                 food.setNo(food.getNo() - 1);
             }
             setShowView(food, tag);
+
+            if (listener != null) {
+                listener.click(foodList);
+            }
         }
     }
 
@@ -132,7 +145,7 @@ public class FoodAdapterV1 extends BaseAdapter {
 
 
             StringBuffer buffer = new StringBuffer();
-            buffer.append(food.getName());
+            buffer.append("<font color=#000000>" + food.getName() + "</font>");
             buffer.append("<font color=#FF0000>");
             buffer.append("$" + food.getDollar());
             buffer.append("</font>");
@@ -143,6 +156,16 @@ public class FoodAdapterV1 extends BaseAdapter {
             viewTag.getRootView().setBackgroundResource(R.color.white);
         } else {
             viewTag.getReduceBtn().setEnabled(true);
+
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("<font color=#FFFFF380>" + food.getName() + "</font>");
+            buffer.append("<font color=#FF0000>");
+            buffer.append("$" + food.getDollar());
+            buffer.append("</font>");
+
+            viewTag.getAddBtn().setText(Html.fromHtml(buffer.toString()));
+
+
             viewTag.getReduceBtn().setText(food.getNo() + "");
 
             viewTag.getRootView().setBackgroundResource(R.color.clickValue);
@@ -152,8 +175,11 @@ public class FoodAdapterV1 extends BaseAdapter {
     public void clean() {
 
 
-        for (Food f : foodList) {
+        for (Food f : this.foodList) {
             f.setNo(0);
+        }
+        if (this.listener != null) {
+            this.listener.click(this.foodList);
         }
 
         notifyDataSetChanged();
@@ -196,6 +222,11 @@ public class FoodAdapterV1 extends BaseAdapter {
         public void setRootView(View rootView) {
             this.rootView = rootView;
         }
+    }
+
+
+    public void setOnClickListener(FoodAdapterV1.OnClickListener listener) {
+        this.listener = listener;
     }
 
 

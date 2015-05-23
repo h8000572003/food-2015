@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -48,6 +49,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
                 f.setNo(++no);
                 viewHolder.lable.setText(String.format(f.getName() + ":%d", f.getNo()));
                 viewHolder.lable.setSelected(true);
+
             }
         });
 
@@ -65,6 +67,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
                     viewHolder.lable.setSelected(false);
                 }
 
+
             }
         });
 
@@ -77,7 +80,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private Button lable;
+        private TextView lable;
 
         private Button reduceBtn;
 
@@ -86,7 +89,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 
 
             this.reduceBtn = (Button) itemView.findViewById(R.id.d_btn);
-            this.lable = (Button) itemView.findViewById(R.id.item_name);
+            this.lable = (TextView) itemView.findViewById(R.id.item_name);
         }
     }
 
@@ -100,7 +103,10 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+
     public List<Food> getFoodList() {
         return this.foodList;
     }
+
+
 }
